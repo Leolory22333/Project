@@ -1,9 +1,8 @@
 from contact import Contact
-from index import HashPrefixIndex  # 仅导入散列表索引
+from index import HashPrefixIndex
 from storage import PersistenceManager
 
 class AddressBook:
-    """通讯录核心管理类：双向链表+散列表索引+原子持久化"""
     def __init__(self):
         # 双向链表：哨兵头节点
         self.head = Contact("", "")
@@ -24,10 +23,9 @@ class AddressBook:
         self._load_from_file()
 
     def _load_from_file(self):
-        """从文件加载联系人数据到内存"""
         contacts_data = self.persistence.load()
         for data in contacts_data:
-            # 加载时不重复持久化（避免循环写入）
+            # 加载时不重复持久化
             self.add_contact(
                 name=data["name"],
                 phone=data["phone"],
@@ -36,12 +34,11 @@ class AddressBook:
             )
 
     def add_contact(self, name: str, phone: str, remark: str = "", persist: bool = True) -> str:
-        """添加联系人：手机号唯一，重复则覆盖"""
-        # 1. 手机号已存在 → 删除旧联系人
+        #手机号已存在,删除旧联系人
         if phone in self.phone_map:
             self.delete_contact(phone, persist=False)
         
-        # 2. 创建新联系人，插入双向链表尾部
+        #创建新联系人，插入双向链表尾部
         new_contact = Contact(name, phone, remark)
         tail = self.head.prev
         tail.next = new_contact
@@ -49,12 +46,12 @@ class AddressBook:
         new_contact.next = self.head
         self.head.prev = new_contact
         
-        # 3. 更新映射和散列表索引
+        #更新映射和散列表索引
         self.phone_map[phone] = new_contact
         self.name_index.insert(name, new_contact)
         self.phone_index.insert(phone, new_contact)
         
-        # 4. 持久化（可选）
+        #持久化
         if persist:
             self.persistence.save(self.get_all_contacts())
         
