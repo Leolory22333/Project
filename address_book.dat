@@ -1,2 +1,210 @@
 Leo|18392834728|student
 Peter|13847562583|student
+ZhangSan|13912345678|engineer
+LiSi|13787654321|teacher
+WangWu|15998765432|doctor
+ZhaoLiu|18811223344|nurse
+QianQi|19955667788|designer
+SunBa|17788990011|manager
+ZhouJiu|16622334455|clerk
+WuShi|15877665544|driver
+ChenYi|13699887766|chef
+YinEr|18266554433|writer
+XueSan|17855443322|artist
+HeSi|15044332211|farmer
+GuWu|18933221100|policeman
+JiangLiu|13522110099|firefighter
+ShenQi|19811009988|lawyer
+HanBa|18100998877|accountant
+YangJiu|17699887766|programmer
+ZhuShi|16588776655|editor
+MaYi|13477665544|reporter
+HuEr|15766554433|barber
+LinSan|18755443322|tailor
+XieSi|17544332211|mechanic
+GaoWu|19733221100|electrician
+LiangLiu|13322110099|plumber
+AnQi|18611009988|carpenter
+CaoBa|17300998877|painter
+PengJiu|19699887766|musician
+LuShi|18088776655|actor
+JinYi|13277665544|actress
+WeiEr|15666554433|singer
+RenSan|17255443322|dancer
+YuanSi|19544332211|model
+FangWu|18533221100|photographer
+ShiLiu|13122110099|videographer
+XiangQi|19411009988|director
+GongBa|17100998877|producer
+ShuJiu|19399887766|host
+XueShi|18488776655|announcer
+BaiYi|13077665544|translator
+KangEr|15566554433|interpreter
+YuanSan|17055443322|tour guide
+TongSi|19244332211|flight attendant
+OuWu|18433221100|pilot
+BaoLiu|13022110099|captain
+QiQi|19111009988|sailor
+ZouBa|17900998877|fisherman
+YuJiu|19099887766|soldier
+TangShi|18388776655|officer
+FengYi|13277665544|detective
+ChengEr|15466554433|spy
+PuSan|17855443322|bodyguard
+NiuSi|19144332211|security
+LangWu|18233221100|janitor
+DuanLiu|13122110099|cleaner
+RaoQi|19011009988|gardener
+JiBa|17700998877|florist
+XunJiu|18999887766|brewer
+LuShi|13888776655|winemaker
+WeiYi|15377665544|chef
+JiangEr|17666554433|baker
+TanSan|19655443322|pastry chef
+YanSi|18844332211|butcher
+HuaWu|13733221100|fishmonger
+HouLiu|15222110099|greengrocer
+ZhanQi|19711009988|bookseller
+MeiBa|17500998877|stationer
+ShiJiu|18799887766|toymaker
+MaoShi|13688776655|jeweler
+JinYi|15177665544|watchmaker
+QianEr|17466554433|shoemaker
+SuSan|19455443322|cobbler
+LiSi|18644332211|tailor
+ZhuWu|13533221100|dressmaker
+YunLiu|15022110099|seamstress
+ChangQi|19311009988|upholsterer
+FaBa|17300998877|carpenter
+LaiJiu|18899887766|joiner
+LongShi|13488776655|cabinet maker
+GuoYi|15977665544|woodcarver
+WenEr|17766554433|stonemason
+ZhangSan|19755443322|bricklayer
+FuSi|18944332211|plasterer
+LvWu|13833221100|roofer
+LiuLiu|15822110099|tiler
+YanQi|19611009988|painter
+JinBa|17600998877|decorator
+XieJiu|18899887766|electrician
+WeiShi|13788776655|electrical engineer
+JiangYi|15777665544|electronic engineer
+ShenEr|17566554433|mechanical engineer
+HanSan|19544332211|civil engineer
+YangSi|18533221100|chemical engineer
+ZhuWu|13522110099|aerospace engineer
+MaLiu|15511009988|software engineer
+HuQi|17400998877|hardware engineer
+LinBa|19499887766|network engineer
+XieJiu|18488776655|database engineer
+GaoShi|13477665544|system engineer
+LiangYi|15466554433|security engineer
+AnEr|17355443322|quality engineer
+CaoSan|19344332211|industrial engineer
+PengSi|18333221100|environmental engineer
+LuWu|13322110099|petroleum engineer
+JinLiu|15311009988|mining engineer
+WeiQi|17200998877|marine engineer
+RenBa|19299887766|automotive engineer
+YuanJiu|18288776655|biomedical engineer
+FangShi|13277665544|textile engineer
+ShiYi|15266554433|food engineer
+XiangEr|17155443322|agricultural engineer
+GongSan|19144332211|biochemical engineer
+ShuSi|18133221100|materials engineer
+XueWu|13122110099|ceramic engineer
+BaiLiu|15111009988|metallurgical engineer
+KangQi|17000998877|plastic engineer
+YuanBa|19099887766|rubber engineer
+TongJiu|18088776655|glass engineer
+OuShi|13077665544|paper engineer
+BaoYi|15966554433|printing engineer
+QiEr|17855443322|packaging engineer
+ZouSan|19844332211|audio engineer
+YuSi|18833221100|video engineer
+TangWu|13822110099|sound engineer
+FengLiu|15811009988|lighting engineer
+ChengQi|17700998877|stage engineer
+PuBa|19799887766|transport engineer
+NiuJiu|18788776655|logistics engineer
+LangShi|13777665544|supply chain engineer
+DuanYi|15766554433|purchasing engineer
+RaoEr|17655443322|sales engineer
+JiSan|19644332211|marketing engineer
+XunSi|18633221100|financial engineer
+LuWu|13622110099|economic engineer
+WeiLiu|15611009988|management engineer
+JiangQi|17500998877|engineering manager
+TanBa|19599887766|project manager
+YanJiu|18588776655|product manager
+HuaShi|13577665544|brand manager
+HouYi|15566554433|marketing manager
+ZhanEr|17455443322|sales manager
+MeiSan|19444332211|customer manager
+ShiSi|18433221100|HR manager
+MaoWu|13422110099|admin manager
+JinLiu|15411009988|IT manager
+QianQi|17300998877|finance manager
+SuBa|19399887766|operation manager
+LiJiu|18388776655|production manager
+ZhuShi|13377665544|quality manager
+YunYi|15366554433|safety manager
+ChangEr|17255443322|facility manager
+FaSan|19244332211|maintenance manager
+LaiSi|18233221100|warehouse manager
+LongWu|13222110099|inventory manager
+GuoLiu|15211009988|shipping manager
+WenQi|17100998877|receiving manager
+ZhangBa|19199887766|logistics manager
+FuJiu|18188776655|transport manager
+LvShi|13177665544|delivery manager
+LiuYi|15166554433|courier
+YanEr|17055443322|postman
+JinSan|19044332211|mail carrier
+XieSi|18033221100|messenger
+WeiWu|13022110099|delivery driver
+JiangLiu|15911009988|truck driver
+ShenQi|17800998877|taxi driver
+HanBa|19899887766|bus driver
+YangJiu|18888776655|train driver
+ZhuShi|13877665544|pilot
+MaYi|15866554433|air hostess
+HuEr|17755443322|flight attendant
+LinSan|19744332211|stewardess
+XieSi|18733221100|sailor
+GaoWu|13722110099|fisherman
+LiangLiu|15711009988|captain
+AnQi|17600998877|navigator
+CaoBa|19699887766|sailing master
+PengJiu|18688776655|marine engineer
+LuShi|13677665544|shipwright
+WeiYi|15666554433|dockworker
+JiangEr|17555443322|longshoreman
+TanSan|19544332211|fisherman
+YanSi|18533221100|fishmonger
+HuaWu|13522110099|seafood merchant
+HouLiu|15511009988|oceanographer
+ZhanQi|17400998877|marine biologist
+MeiBa|19499887766|marine geologist
+ShiJiu|18488776655|ocean engineer
+MaoShi|13477665544|coast guard
+JinYi|15466554433|lifeguard
+QianEr|17355443322|surfer
+SuSan|19344332211|diver
+LiSi|18333221100|snorkeler
+ZhuWu|13322110099|swimming coach
+YunLiu|15311009988|yoga instructor
+ChangQi|17200998877|fitness trainer
+FaBa|19299887766|personal trainer
+LaiJiu|18288776655|gym coach
+LongShi|13277665544|dance instructor
+GuoYi|15266554433|music teacher
+WenEr|17155443322|art teacher
+ZhangSan|19144332211|math teacher
+FuSi|18133221100|english teacher
+LvWu|13122110099|chinese teacher
+LiuLiu|15111009988|history teacher
+YanQi|17000998877|geography teacher
+JinBa|19099887766|biology teacher
+XieJiu|18088776655|chemistry teacher
+WeiShi|13077665544|physics teacher
