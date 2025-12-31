@@ -4,7 +4,7 @@ from address_book import AddressBook
 from contact import Contact
 
 class TestAddressBook(unittest.TestCase):
-    """通讯录单元测试"""
+    """通讯录单元测试（散列表索引版）"""
     # 测试前初始化
     def setUp(self):
         # 临时测试文件，避免污染正式数据
@@ -16,8 +16,8 @@ class TestAddressBook(unittest.TestCase):
             if os.path.exists(f):
                 os.remove(f)
         
-        # 初始化通讯录（使用散列表索引）
-        self.ab = AddressBook(use_trie=False)
+        # 初始化通讯录（固定散列表索引）
+        self.ab = AddressBook()
         # 替换持久化文件路径为测试文件
         self.ab.persistence.filepath = self.test_file
         self.ab.persistence.tmp_filepath = self.test_tmp_file
@@ -51,7 +51,7 @@ class TestAddressBook(unittest.TestCase):
         self.assertEqual(len(self.ab.get_all_contacts()), 0)
         self.assertNotIn("13900139000", self.ab.phone_map)
 
-    # 测试姓名前缀检索
+    # 测试姓名前缀检索（散列表）
     def test_find_name_prefix(self):
         # 添加测试数据
         self.ab.add_contact("张三", "13800138000")
@@ -68,7 +68,7 @@ class TestAddressBook(unittest.TestCase):
         contacts = self.ab.find_by_name_prefix("王")
         self.assertEqual(len(contacts), 0)
 
-    # 测试电话前缀检索
+    # 测试电话前缀检索（散列表）
     def test_find_phone_prefix(self):
         self.ab.add_contact("王五", "13700137000")
         self.ab.add_contact("赵六", "13700137001")
@@ -88,7 +88,7 @@ class TestAddressBook(unittest.TestCase):
         self.ab.persistence.save(self.ab.get_all_contacts())
         
         # 新建通讯录实例，加载测试文件
-        new_ab = AddressBook(use_trie=False)
+        new_ab = AddressBook()
         new_ab.persistence.filepath = self.test_file
         new_ab._load_from_file()
         
