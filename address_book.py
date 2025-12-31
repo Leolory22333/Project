@@ -5,15 +5,15 @@ from storage import PersistenceManager
 class AddressBook:
     """通讯录核心管理类：双向链表+散列表索引+原子持久化"""
     def __init__(self):
-        # 双向链表：哨兵头节点（简化边界操作）
+        # 双向链表：哨兵头节点
         self.head = Contact("", "")
         self.head.prev = self.head
         self.head.next = self.head
         
-        # 手机号映射（保证唯一性，O(1)查找）
+        # 手机号映射
         self.phone_map = {}
         
-        # 仅使用散列表索引（姓名+电话）
+        # 仅使用散列表索引
         self.name_index = HashPrefixIndex()
         self.phone_index = HashPrefixIndex()
         
@@ -62,28 +62,28 @@ class AddressBook:
 
     def delete_contact(self, phone: str, persist: bool = True) -> str:
         """根据手机号删除联系人"""
-        # 1. 手机号不存在 → 失败
+        #手机号不存在
         if phone not in self.phone_map:
             return f"❌ 删除失败：手机号 {phone} 不存在"
         
-        # 2. 从链表移除
+        #从链表移除
         contact = self.phone_map[phone]
         contact.prev.next = contact.next
         contact.next.prev = contact.prev
         
-        # 3. 从散列表索引和映射移除
+        #从散列表索引和映射移除
         self.name_index.delete(contact.name, contact)
         self.phone_index.delete(contact.phone, contact)
         del self.phone_map[phone]
         
-        # 4. 持久化（可选）
+        #持久化
         if persist:
             self.persistence.save(self.get_all_contacts())
         
         return f"✅ 删除成功：{contact}"
 
     def find_by_name_prefix(self, prefix: str, max_limit: int = 10) -> list:
-        """按姓名前缀检索（散列表实现），返回最多max_limit条结果"""
+        """按姓名前缀检索，返回最多max_limit条结果"""
         contacts = self.name_index.search(prefix)
         # 截断并提示
         if len(contacts) > max_limit:
@@ -92,7 +92,7 @@ class AddressBook:
         return contacts
 
     def find_by_phone_prefix(self, prefix: str, max_limit: int = 10) -> list:
-        """按电话前缀检索（散列表实现），返回最多max_limit条结果"""
+        """按电话前缀检索，返回最多max_limit条结果"""
         contacts = self.phone_index.search(prefix)
         if len(contacts) > max_limit:
             print(f"💡 提示：匹配结果共 {len(contacts)} 条，仅展示前 {max_limit} 条")
