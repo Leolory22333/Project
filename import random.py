@@ -64,7 +64,7 @@ def generate_random_identity():
     ]
     return random.choice(professions)
 
-def generate_contacts(count=1000, output_file="通讯数据_1000条.txt"):
+def generate_contacts(count=1000, output_file="address_book.dat"):
     """生成指定数量数据，严格按【姓名|手机号|职业身份】格式，保存至文件"""
     contacts_list = []
     phone_unique_set = set()  
