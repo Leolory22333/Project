@@ -1,10 +1,11 @@
 from address_book import AddressBook
 
 def print_help():
+    """打印帮助信息"""
     print("=" * 50)
-    print("📖 通讯录管理系统 - 导航菜单")
+    print("📖 通讯录管理系统 - 命令说明（散列表索引版）")
     print("=" * 50)
-    print("ADD <姓名> <电话> [备注]  - 添加联系人")
+    print("ADD <姓名> <电话> [备注]  - 添加联系人（手机号唯一）")
     print("DEL <电话>               - 根据手机号删除联系人")
     print("FIND_NAME <前缀>         - 按姓名前缀检索")
     print("FIND_PHONE <前缀>        - 按电话前缀检索")
@@ -12,13 +13,66 @@ def print_help():
     print("SAVE                     - 手动触发持久化")
     print("HELP                     - 查看帮助")
     print("EXIT                     - 退出系统")
+    print("📌 检索后可输入 NEXT/PREV 翻页，输入 BACK 返回主菜单")
     print("=" * 50)
 
+# 新增分页交互函数
+def pagination_interaction(contacts: list, search_type: str):
+    """
+    检索结果分页交互
+    :param contacts: 全部匹配的联系人列表
+    :param search_type: 检索类型（姓名/电话）
+    """
+    if not contacts:
+        print("📭 未找到匹配的联系人")
+        return
+    
+    page = 1
+    page_size = 10
+    total = len(contacts)
+    paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
+    
+    while True:
+        # 打印当前页信息
+        print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条")
+        print("-" * 50)
+        if paginated_data:
+            for i, c in enumerate(paginated_data, 1):
+                # 计算全局序号
+                global_idx = (page - 1) * page_size + i
+                print(f"  {global_idx}. {c}")
+        else:
+            print("  暂无数据")
+        print("-" * 50)
+        
+        # 打印分页提示
+        if total_pages > 1:
+            print("操作提示：输入 NEXT 下一页 | PREV 上一页 | BACK 返回主菜单")
+        else:
+            print("操作提示：输入 BACK 返回主菜单")
+        
+        # 接收用户分页指令
+        cmd = input("请输入操作指令 > ").strip().upper()
+        if cmd == "NEXT":
+            page += 1
+            paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
+        elif cmd == "PREV":
+            page -= 1
+            paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
+        elif cmd == "BACK":
+            print("🔙 返回主菜单")
+            break
+        else:
+            print("❌ 无效指令，请输入 NEXT/PREV/BACK")
+
 def main():
-    # 初始化通讯录
-    print("🔧 初始化通讯录")
+    """命令行交互主逻辑（仅散列表索引）"""
+    # 初始化通讯录（固定使用散列表索引，无需选择）
+    print("🔧 初始化通讯录（散列表索引）...")
+    global address_book  # 声明全局变量，供分页函数调用
     address_book = AddressBook()
     
+    # 打印欢迎信息和帮助
     print("\n🎉 欢迎使用通讯录管理系统！输入 HELP 查看命令说明")
     print_help()
 
@@ -53,35 +107,28 @@ def main():
                     print("❌ 参数错误：FIND_NAME 需要 姓名前缀")
                     continue
                 prefix = parts[1]
-                contacts = address_book.find_by_name_prefix(prefix)
-                if not contacts:
-                    print("📭 未找到匹配的联系人")
-                else:
-                    print(f"🔍 找到 {len(contacts)} 条匹配结果：")
-                    for i, c in enumerate(contacts, 1):
-                        print(f"  {i}. {c}")
+                # 获取全部匹配结果
+                all_contacts = address_book.find_by_name_prefix(prefix)
+                # 进入分页交互
+                pagination_interaction(all_contacts, "姓名")
 
             elif main_cmd == "FIND_PHONE":
                 if len(parts) < 2:
                     print("❌ 参数错误：FIND_PHONE 需要 电话前缀")
                     continue
                 prefix = parts[1]
-                contacts = address_book.find_by_phone_prefix(prefix)
-                if not contacts:
-                    print("📭 未找到匹配的联系人")
-                else:
-                    print(f"🔍 找到 {len(contacts)} 条匹配结果：")
-                    for i, c in enumerate(contacts, 1):
-                        print(f"  {i}. {c}")
+                # 获取全部匹配结果
+                all_contacts = address_book.find_by_phone_prefix(prefix)
+                # 进入分页交互
+                pagination_interaction(all_contacts, "电话")
 
             elif main_cmd == "LIST":
                 all_contacts = address_book.get_all_contacts()
                 if not all_contacts:
                     print("📂 通讯录为空")
                 else:
-                    print(f"📂 通讯录共 {len(all_contacts)} 条记录：")
-                    for idx, contact in enumerate(all_contacts, 1):
-                        print(f"  {idx}. {contact}")
+                    # LIST命令也支持分页
+                    pagination_interaction(all_contacts, "全部")
 
             elif main_cmd == "SAVE":
                 address_book.persistence.save(address_book.get_all_contacts())
