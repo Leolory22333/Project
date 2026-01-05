@@ -1,3 +1,4 @@
+import time  # 新增：导入时间模块
 from address_book import AddressBook
 
 def print_help():
@@ -14,16 +15,34 @@ def print_help():
     print("HELP                     - 查看帮助")
     print("EXIT                     - 退出系统")
     print("📌 检索后可输入 NEXT/PREV 翻页，输入 BACK 返回主菜单")
+    print("📌 检索结果将显示本次查询耗时（单位：秒）")
     print("=" * 50)
 
-# 新增分页交互函数
-def pagination_interaction(contacts: list, search_type: str):
+# 新增：计时装饰器/辅助函数（更通用）
+def calculate_search_time(func):
     """
-    检索结果分页交互
+    计算检索函数执行时间的装饰器
+    :param func: 检索函数
+    :return: 包装后的函数，返回 (结果, 耗时)
+    """
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter()  # 高精度计时
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        elapsed_time = end_time - start_time  # 耗时（秒）
+        return result, elapsed_time
+    return wrapper
+
+# 新增分页交互函数（增加耗时展示）
+def pagination_interaction(contacts: list, search_type: str, elapsed_time: float):
+    """
+    检索结果分页交互（新增耗时展示）
     :param contacts: 全部匹配的联系人列表
-    :param search_type: 检索类型（姓名/电话）
+    :param search_type: 检索类型（姓名/电话/全部）
+    :param elapsed_time: 检索耗时（秒）
     """
     if not contacts:
+        print(f"\n🔍 {search_type}前缀检索结果 | 耗时：{elapsed_time:.6f} 秒")
         print("📭 未找到匹配的联系人")
         return
     
@@ -32,20 +51,20 @@ def pagination_interaction(contacts: list, search_type: str):
     total = len(contacts)
     paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
     
+    # 首次展示时打印检索耗时
+    print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条 | 耗时：{elapsed_time:.6f} 秒")
+    print("-" * 60)
+    if paginated_data:
+        for i, c in enumerate(paginated_data, 1):
+            # 计算全局序号
+            global_idx = (page - 1) * page_size + i
+            print(f"  {global_idx}. {c}")
+    else:
+        print("  暂无数据")
+    print("-" * 60)
+    
+    # 打印分页提示
     while True:
-        # 打印当前页信息
-        print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条")
-        print("-" * 50)
-        if paginated_data:
-            for i, c in enumerate(paginated_data, 1):
-                # 计算全局序号
-                global_idx = (page - 1) * page_size + i
-                print(f"  {global_idx}. {c}")
-        else:
-            print("  暂无数据")
-        print("-" * 50)
-        
-        # 打印分页提示
         if total_pages > 1:
             print("操作提示：输入 NEXT 下一页 | PREV 上一页 | BACK 返回主菜单")
         else:
@@ -56,9 +75,28 @@ def pagination_interaction(contacts: list, search_type: str):
         if cmd == "NEXT":
             page += 1
             paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
+            # 翻页时仅更新页码，不重复计时（计时仅针对首次检索）
+            print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条")
+            print("-" * 60)
+            if paginated_data:
+                for i, c in enumerate(paginated_data, 1):
+                    global_idx = (page - 1) * page_size + i
+                    print(f"  {global_idx}. {c}")
+            else:
+                print("  暂无数据")
+            print("-" * 60)
         elif cmd == "PREV":
             page -= 1
             paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
+            print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条")
+            print("-" * 60)
+            if paginated_data:
+                for i, c in enumerate(paginated_data, 1):
+                    global_idx = (page - 1) * page_size + i
+                    print(f"  {global_idx}. {c}")
+            else:
+                print("  暂无数据")
+            print("-" * 60)
         elif cmd == "BACK":
             print("🔙 返回主菜单")
             break
@@ -71,6 +109,11 @@ def main():
     print("🔧 初始化通讯录（散列表索引）...")
     global address_book  # 声明全局变量，供分页函数调用
     address_book = AddressBook()
+    
+    # 为检索函数添加计时装饰器
+    timed_find_name = calculate_search_time(address_book.find_by_name_prefix)
+    timed_find_phone = calculate_search_time(address_book.find_by_phone_prefix)
+    timed_list_all = calculate_search_time(address_book.get_all_contacts)
     
     # 打印欢迎信息和帮助
     print("\n🎉 欢迎使用通讯录管理系统！输入 HELP 查看命令说明")
@@ -107,31 +150,30 @@ def main():
                     print("❌ 参数错误：FIND_NAME 需要 姓名前缀")
                     continue
                 prefix = parts[1]
-                # 获取全部匹配结果
-                all_contacts = address_book.find_by_name_prefix(prefix)
-                # 进入分页交互
-                pagination_interaction(all_contacts, "姓名")
+                # 带计时的检索
+                all_contacts, elapsed_time = timed_find_name(prefix)
+                # 进入分页交互（传入耗时）
+                pagination_interaction(all_contacts, "姓名", elapsed_time)
 
             elif main_cmd == "FIND_PHONE":
                 if len(parts) < 2:
                     print("❌ 参数错误：FIND_PHONE 需要 电话前缀")
                     continue
                 prefix = parts[1]
-                # 获取全部匹配结果
-                all_contacts = address_book.find_by_phone_prefix(prefix)
-                # 进入分页交互
-                pagination_interaction(all_contacts, "电话")
+                # 带计时的检索
+                all_contacts, elapsed_time = timed_find_phone(prefix)
+                # 进入分页交互（传入耗时）
+                pagination_interaction(all_contacts, "电话", elapsed_time)
 
             elif main_cmd == "LIST":
-                all_contacts = address_book.get_all_contacts()
-                if not all_contacts:
-                    print("📂 通讯录为空")
-                else:
-                    # LIST命令也支持分页
-                    pagination_interaction(all_contacts, "全部")
+                # 带计时的全量检索
+                all_contacts, elapsed_time = timed_list_all()
+                # 进入分页交互（传入耗时）
+                pagination_interaction(all_contacts, "全部", elapsed_time)
 
             elif main_cmd == "SAVE":
                 address_book.persistence.save(address_book.get_all_contacts())
+                print("✅ 手动持久化完成")
 
             elif main_cmd == "HELP":
                 print_help()
