@@ -5,29 +5,29 @@ from storage import PersistenceManager
 class AddressBook:
     """通讯录核心管理类：双向链表+散列表索引+原子持久化"""
     def __init__(self):
-        # 双向链表：哨兵头节点（简化边界操作）
+        # 哨兵头节点
         self.head = Contact("", "")
         self.head.prev = self.head
         self.head.next = self.head
         
-        # 手机号映射（保证唯一性，O(1)查找）
+        # 手机号映射
         self.phone_map = {}
         
-        # 仅使用散列表索引（姓名+电话）
+        # 散列表索引
         self.name_index = HashPrefixIndex()
         self.phone_index = HashPrefixIndex()
         
-        # 持久化管理器
+        # 持久化
         self.persistence = PersistenceManager()
         
-        # 初始化：从文件加载数据
+        # 初始化
         self._load_from_file()
 
     def _load_from_file(self):
         """从文件加载联系人数据到内存"""
         contacts_data = self.persistence.load()
         for data in contacts_data:
-            # 加载时不重复持久化（避免循环写入）
+            # 加载时不重复持久化
             self.add_contact(
                 name=data["name"],
                 phone=data["phone"],
@@ -54,7 +54,7 @@ class AddressBook:
         self.name_index.insert(name, new_contact)
         self.phone_index.insert(phone, new_contact)
         
-        # 4. 持久化（可选）
+        # 4. 持久化
         if persist:
             self.persistence.save(self.get_all_contacts())
         
@@ -76,7 +76,7 @@ class AddressBook:
         self.phone_index.delete(contact.phone, contact)
         del self.phone_map[phone]
         
-        # 4. 持久化（可选）
+        # 4. 持久化
         if persist:
             self.persistence.save(self.get_all_contacts())
         
@@ -99,7 +99,7 @@ class AddressBook:
             current_node = current_node.next
         return contacts_list
     
-    # 新增分页方法
+    # 分页
     def get_paginated_contacts(self, contacts: list, page: int, page_size: int = 10) -> tuple:
         """
         分页处理联系人列表
