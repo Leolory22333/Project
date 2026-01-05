@@ -1,8 +1,7 @@
-import time  # 新增：导入时间模块
+import time
 from address_book import AddressBook
 
 def print_help():
-    """打印帮助信息"""
     print("=" * 50)
     print("📖 通讯录管理系统 - 命令说明（散列表索引版）")
     print("=" * 50)
@@ -18,7 +17,7 @@ def print_help():
     print("📌 检索结果将显示本次查询耗时（单位：秒）")
     print("=" * 50)
 
-# 新增：计时装饰器/辅助函数（更通用）
+# 计时器函数
 def calculate_search_time(func):
     """
     计算检索函数执行时间的装饰器
@@ -26,14 +25,14 @@ def calculate_search_time(func):
     :return: 包装后的函数，返回 (结果, 耗时)
     """
     def wrapper(*args, **kwargs):
-        start_time = time.perf_counter()  # 高精度计时
+        start_time = time.perf_counter()  # 高精度
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
-        elapsed_time = end_time - start_time  # 耗时（秒）
+        elapsed_time = end_time - start_time  # 耗时
         return result, elapsed_time
     return wrapper
 
-# 新增分页交互函数（增加耗时展示）
+# 分页交互函数
 def pagination_interaction(contacts: list, search_type: str, elapsed_time: float):
     """
     检索结果分页交互（新增耗时展示）
@@ -75,7 +74,7 @@ def pagination_interaction(contacts: list, search_type: str, elapsed_time: float
         if cmd == "NEXT":
             page += 1
             paginated_data, total_pages, _, page = address_book.get_paginated_contacts(contacts, page, page_size)
-            # 翻页时仅更新页码，不重复计时（计时仅针对首次检索）
+            # 翻页时仅更新页码，不重复计时
             print(f"\n🔍 {search_type}前缀检索结果 - 第 {page}/{total_pages} 页 | 共 {total} 条")
             print("-" * 60)
             if paginated_data:
@@ -105,17 +104,16 @@ def pagination_interaction(contacts: list, search_type: str, elapsed_time: float
 
 def main():
     """命令行交互主逻辑（仅散列表索引）"""
-    # 初始化通讯录（固定使用散列表索引，无需选择）
+    # 初始化通讯录
     print("🔧 初始化通讯录（散列表索引）...")
-    global address_book  # 声明全局变量，供分页函数调用
+    global address_book  # 全局变量
     address_book = AddressBook()
     
-    # 为检索函数添加计时装饰器
+    # 计时器
     timed_find_name = calculate_search_time(address_book.find_by_name_prefix)
     timed_find_phone = calculate_search_time(address_book.find_by_phone_prefix)
     timed_list_all = calculate_search_time(address_book.get_all_contacts)
     
-    # 打印欢迎信息和帮助
     print("\n🎉 欢迎使用通讯录管理系统！输入 HELP 查看命令说明")
     print_help()
 
@@ -128,7 +126,6 @@ def main():
             parts = cmd.split(maxsplit=3)
             main_cmd = parts[0].upper()
 
-            # 命令解析
             if main_cmd == "ADD":
                 if len(parts) < 3:
                     print("❌ 参数错误：ADD 需要 姓名、电话，可选备注")
@@ -152,7 +149,7 @@ def main():
                 prefix = parts[1]
                 # 带计时的检索
                 all_contacts, elapsed_time = timed_find_name(prefix)
-                # 进入分页交互（传入耗时）
+                # 进入分页交互
                 pagination_interaction(all_contacts, "姓名", elapsed_time)
 
             elif main_cmd == "FIND_PHONE":
@@ -162,13 +159,13 @@ def main():
                 prefix = parts[1]
                 # 带计时的检索
                 all_contacts, elapsed_time = timed_find_phone(prefix)
-                # 进入分页交互（传入耗时）
+                # 进入分页交互
                 pagination_interaction(all_contacts, "电话", elapsed_time)
 
             elif main_cmd == "LIST":
                 # 带计时的全量检索
                 all_contacts, elapsed_time = timed_list_all()
-                # 进入分页交互（传入耗时）
+                # 进入分页交互
                 pagination_interaction(all_contacts, "全部", elapsed_time)
 
             elif main_cmd == "SAVE":
