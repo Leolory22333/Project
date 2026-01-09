@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-通讯录前端交互模块
-功能：命令行交互入口，解析用户命令，调用后端逻辑，展示结果
-核心修改：新增手机号合法输入校验，不满足11位要求则强制重新输入
-作者：XXX
-日期：2026-01-09
-"""
+
 from address_book import AddressBook
 from utils.helpers import validate_phone, sanitize_input
 
